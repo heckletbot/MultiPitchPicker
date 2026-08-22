@@ -1,0 +1,19 @@
+{
+  "instrument": "marimba",
+  "midi_lo": 36,
+  "midi_hi": 100,
+  "target_sr": 16000,
+  "timbres": ["yarn", "cord", "rubber"],
+  "train_timbres": ["cord", "yarn"],
+  "heldout_timbres": ["rubber"],
+  "skip_articulations": ["roll", "deadstroke"],
+  "clarity_top_k": 7,
+  "iowa_page": "https://theremin.music.uiowa.edu/Mismarimba.html",
+  "iowa_keep_mallets": ["yarn", "cord", "rubber"],
+  "synth": {
+    "n_train": 12000,
+    "n_val": 400,
+    "n_test": 400,
+    "workers": 8
+  }
+}

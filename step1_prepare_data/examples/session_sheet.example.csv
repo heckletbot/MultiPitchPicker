@@ -1,0 +1,5 @@
+path,midi,dynamic,timbre
+raw/take_c4_mf_yarn.wav,60,mf,yarn
+raw/take_c4_pp_yarn.wav,60,pp,yarn
+raw/take_c4_ff_yarn.wav,60,ff,yarn
+raw/take_e4_mf_cord.wav,64,mf,cord

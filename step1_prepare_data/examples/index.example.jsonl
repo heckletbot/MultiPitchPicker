@@ -1,0 +1,3 @@
+{"wav": "data/singles/C4.yarn.mf.wav", "midi": 60, "dynamic": "mf", "timbre": "yarn", "winner_midi": 60}
+{"wav": "data/singles/E4.cord.pp.wav", "midi": 64, "dynamic": "pp", "timbre": "cord", "winner_midi": 64}
+{"wav": "data/singles/G3.rubber.ff.wav", "midi": 55, "dynamic": "ff", "timbre": "rubber", "winner_midi": 55}
