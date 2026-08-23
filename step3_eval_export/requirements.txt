@@ -1,0 +1,8 @@
+# 测评需要 torch；导出还需要 onnx / onnxruntime。
+torch>=2.1
+numpy>=1.24
+librosa>=0.10
+soundfile>=0.12
+scipy>=1.10
+onnx>=1.15
+onnxruntime>=1.16

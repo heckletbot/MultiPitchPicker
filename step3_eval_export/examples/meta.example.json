@@ -1,0 +1,15 @@
+{
+  "sr": 16000,
+  "hop": 256,
+  "fps": 62.5,
+  "midi_lo": 36,
+  "num_pitches": 65,
+  "thresh_default": 0.8,
+  "thresh_sensitive": 0.5,
+  "min_gap_frames": 3,
+  "peak_floor": 0.2,
+  "cqt_gamma": 0.0,
+  "lookahead": false,
+  "receptive_future_sec": 0.75,
+  "note": "onset/vel 均为概率；音高 = 行索引 + midi_lo；力度 = vel*127"
+}

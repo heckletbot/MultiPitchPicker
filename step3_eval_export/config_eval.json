@@ -1,0 +1,36 @@
+{
+  "synth_dir": "data/synth",
+  "real_dir": "data/real",
+  "bias": "data/runs/torch_cqt_bias.pt",
+  "export_dir": "export",
+  "onnx_name": "model.onnx",
+  "base_run": "base",
+  "mix_run": "mix",
+  "eval": {
+    "thresh_lo": 0.25,
+    "thresh_hi": 0.90,
+    "thresh_step": 0.05,
+    "batch_size": 16,
+    "onset_tolerance_ms": 50
+  },
+  "calibrate": {
+    "check_jsonl": "data/synth/validation.jsonl",
+    "n": 16
+  },
+  "accept": {
+    "synth_f1_warn_below": 0.98,
+    "note": "马林巴对照：合成 test F1≈0.994、τ≈0.8、力度 MAE≈7。换乐器必须重扫 τ，不要照抄 0.8。"
+  },
+  "marimba_reference": {
+    "f1": 0.994,
+    "precision": 0.995,
+    "recall": 0.993,
+    "velocity_mae": 7.0,
+    "thresh": 0.8,
+    "real_health": {
+      "rolling_girl": {"notes": 1118, "in_key_pct": 99.5},
+      "25ji_no_jounetsu": {"notes": 1154, "in_key_pct": 97.9},
+      "until_dawn": {"notes": 1763, "in_key_pct": 73.9, "note": "原曲多转调，占比正常"}
+    }
+  }
+}

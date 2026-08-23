@@ -1,0 +1,32 @@
+{
+  "decoder": "infer_onnx.transcribe_file",
+  "onnx": "export/model.onnx",
+  "thresh": 0.8,
+  "n_files": 1,
+  "n_ok": 1,
+  "mean_notes_per_sec": 9.32,
+  "mean_in_key_pct": 99.5,
+  "files": [
+    {
+      "path": "data/real/rolling_girl.mp3",
+      "ok": true,
+      "duration_sec": 120.0,
+      "n_notes": 1118,
+      "notes_per_sec": 9.32,
+      "midi_lo": 48,
+      "midi_hi": 84,
+      "note_lo": "C3",
+      "note_hi": "C6",
+      "mean_velocity": 72.0,
+      "key": "C大调",
+      "in_key_pct": 99.5,
+      "corr": 0.91
+    }
+  ],
+  "note": "无乐谱，调内占比用音级直方图估调。转调乐曲会偏低。",
+  "marimba_reference": {
+    "rolling_girl": {"notes": 1118, "in_key_pct": 99.5},
+    "25ji_no_jounetsu": {"notes": 1154, "in_key_pct": 97.9},
+    "until_dawn": {"notes": 1763, "in_key_pct": 73.9, "note": "原曲多转调，占比正常"}
+  }
+}
