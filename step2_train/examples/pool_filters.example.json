@@ -1,0 +1,6 @@
+{
+  "_comment": "键 = data/real/ 下的文件名。exclude=true 整首不用；keep_until_sec / trim_end_sec 切掉非独奏段。",
+  "other_instrument_or_vocal.mp3": {"exclude": true},
+  "solo_then_band_enters.mp3": {"keep_until_sec": 90},
+  "applause_ending.mp3": {"trim_end_sec": 10}
+}

@@ -1,0 +1,34 @@
+{
+  "synth_dir": "data/synth",
+  "real_dir": "data/real",
+  "pseudo_dir": "data/pseudo",
+  "base": {
+    "run_name": "base",
+    "epochs": 30,
+    "lr": 3e-4,
+    "batch_size": 32,
+    "workers": 8
+  },
+  "pseudo": {
+    "thresh": 0.3,
+    "min_notes": 4
+  },
+  "mix": {
+    "run_name": "mix",
+    "epochs": 8,
+    "lr": 1e-4,
+    "batch_size": 32,
+    "workers": 8,
+    "synth_take": 8000,
+    "pseudo_repeat": 2
+  },
+  "eval": {
+    "thresh_lo": 0.25,
+    "thresh_hi": 0.90,
+    "thresh_step": 0.05
+  },
+  "accept": {
+    "synth_f1_warn_below": 0.98,
+    "note": "马林巴对照：合成 test F1≈0.994、力度 MAE≈7、τ≈0.8。换乐器用本次扫描的 best_thresh，不要照抄。"
+  }
+}

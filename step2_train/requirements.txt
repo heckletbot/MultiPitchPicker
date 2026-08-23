@@ -1,0 +1,6 @@
+# 训练与本步脚本
+torch>=2.1
+numpy>=1.24
+librosa>=0.10
+soundfile>=0.12
+scipy>=1.10
