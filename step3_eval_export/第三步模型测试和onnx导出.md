@@ -130,3 +130,5 @@ python step3_eval_export/scripts/02_real_health.py          # 需要已导出的
 
 
 权重仍在 `data/runs/`，ONNX 在仓库根目录 `export/`，中间报告在 `step3_eval_export/work/`。
+
+完成后下一步见 [第四步：模型调用和实战测试方法](../step4_api/第四步模型调用和实战测试方法.md)。

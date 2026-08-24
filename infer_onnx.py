@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """端侧参考实现：仅用 numpy + onnxruntime 做整曲转录（8s 滑窗 hanning 拼接 + 峰值解码）。
 
-这份解码逻辑与 Android App 内的 Kotlin 实现一一对应，可作为对拍基准。
+这份解码逻辑可作为端侧对拍基准。
 
 用法：
   python3 infer_onnx.py --audio song.mp3 \
@@ -23,6 +23,58 @@ NAMES = ("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
 
 def sci(m: int) -> str:
     return f"{NAMES[m % 12]}{m // 12 - 1}"
+
+
+def decode_onset_maps(on_p: np.ndarray, vel_p: np.ndarray, meta: dict, thresh: float,
+                      t0: float = 0.0) -> list[dict]:
+    """onset/vel 概率图 → events。on_p/vel_p 形状 (音高数, T)。time 为 t0 + 帧/FPS。"""
+    floor, gap = meta["peak_floor"], meta["min_gap_frames"]
+    n_p = on_p.shape[0]
+    events = []
+    for p in range(n_p):
+        row = on_p[p]
+        kept: list[tuple[int, float]] = []
+        for t in range(2, len(row) - 2):
+            v = row[t]
+            if v < max(floor, thresh) or v < row[t - 2: t + 3].max() - 1e-9:
+                continue
+            if kept and t - kept[-1][0] < gap:
+                if v > kept[-1][1]:
+                    kept[-1] = (t, v)
+            else:
+                kept.append((t, v))
+        for t, v in kept:
+            midi = p + meta["midi_lo"]
+            events.append({
+                "time": round(t0 + t / FPS, 3),
+                "midis": [midi], "notes": [sci(midi)],
+                "probs": [round(float(v), 4)],
+                "velocity": int(round(float(vel_p[p, t]) * 127)),
+            })
+    events.sort(key=lambda e: e["time"])
+    return events
+
+
+def transcribe_chunk(y: np.ndarray, sess, meta: dict, thresh: float | None = None,
+                     t0: float = 0.0) -> dict:
+    """一段 PCM 直接送 ONNX（不补零到 8 秒）。用于 2 秒退化窗。
+
+    y: 1-D float32，16 kHz 单声道。
+    返回 duration / thresh / n_notes / notes（字段与 transcribe_file 相同）。
+    duration 为本段秒数；notes[].time 相对本段起点，再加上 t0。
+    """
+    y = np.asarray(y, dtype=np.float32).reshape(-1)
+    th = float(thresh) if thresh is not None else float(meta["thresh_default"])
+    on, vel = sess.run(None, {"audio": y[None]})
+    events = decode_onset_maps(on[0], vel[0], meta, th, t0=t0)
+    notes = flatten_note_events(events)
+    return {
+        "duration": round(len(y) / SR, 3),
+        "thresh": th,
+        "n_notes": len(notes),
+        "notes": notes,
+        "events": events,
+    }
 
 
 def transcribe(y: np.ndarray, sess, meta: dict, thresh: float):
@@ -48,29 +100,7 @@ def transcribe(y: np.ndarray, sess, meta: dict, thresh: float):
         wgt[f0:e] += w[: e - f0]
     on_p = on_acc / np.maximum(wgt, 1e-9)
     vel_p = vel_acc / np.maximum(wgt, 1e-9)
-
-    # 峰值解码：±2 帧局部极大 & >= thresh，同音高 min_gap 内保留最大者
-    floor, gap = meta["peak_floor"], meta["min_gap_frames"]
-    events = []
-    for p in range(n_p):
-        row = on_p[p]
-        kept: list[tuple[int, float]] = []
-        for t in range(2, len(row) - 2):
-            v = row[t]
-            if v < max(floor, thresh) or v < row[t - 2: t + 3].max() - 1e-9:
-                continue
-            if kept and t - kept[-1][0] < gap:
-                if v > kept[-1][1]:
-                    kept[-1] = (t, v)
-            else:
-                kept.append((t, v))
-        for t, v in kept:
-            midi = p + meta["midi_lo"]
-            events.append({"time": round(t / FPS, 3), "midis": [midi], "notes": [sci(midi)],
-                           "probs": [round(float(v), 4)],
-                           "velocity": int(round(float(vel_p[p, t]) * 127))})
-    events.sort(key=lambda e: e["time"])
-    return events
+    return decode_onset_maps(on_p, vel_p, meta, thresh)
 
 
 def flatten_note_events(events: list[dict]) -> list[dict]:
@@ -111,7 +141,7 @@ def transcribe_file(
     sess=None,
     meta: dict | None = None,
 ) -> dict:
-    """整曲转录（解码与 CLI / Android 相同）。
+    """整曲转录（解码与 CLI / HTTP 相同）。
 
     返回 duration / thresh / n_notes、
     notes（{time, midi, note, velocity}）、events（原 jsonl 字段）。

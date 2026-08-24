@@ -1,0 +1,10 @@
+{
+  "duration": 12.48,
+  "thresh": 0.8,
+  "n_notes": 3,
+  "notes": [
+    {"time": 0.32, "midi": 60, "note": "C4", "velocity": 86},
+    {"time": 0.64, "midi": 64, "note": "E4", "velocity": 72},
+    {"time": 0.96, "midi": 67, "note": "G4", "velocity": 80}
+  ]
+}

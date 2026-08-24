@@ -7,3 +7,4 @@
 - [第一步：数据预处理](step1_prepare_data/第一步数据预处理.md)
 - [第二步：模型训练](step2_train/第二步模型训练.md)
 - [第三步：模型测试和 ONNX 导出](step3_eval_export/第三步模型测试和onnx导出.md)
+- [第四步：模型调用和实战测试方法](step4_api/第四步模型调用和实战测试方法.md)

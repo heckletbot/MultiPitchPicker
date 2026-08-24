@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """对 data/real/ 做无监督健康度（无乐谱）：音符密度、音域、调内占比。
 
-解码走 infer_onnx.transcribe_file（与客户端 / Android 同一套 onset 峰检测），
+解码走 infer_onnx.transcribe_file（与 CLI / HTTP 同一套 onset 峰检测），
 因此需要先导出 ONNX。没有真录就跳过。
 """
 from __future__ import annotations
